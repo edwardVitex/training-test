@@ -20,6 +20,8 @@
 
 #### Lưu ý
 
+-   Hiển thị trạng thái `Loading` khi đang tải dữ liệu và ẩn `Loading` khi dữ liệu đã tải xong
+
 -   Chia nhỏ các component để tối ưu performance
 
 -   Sử dụng `React Navigation` để quản lý navigation trong ứng dụng
