@@ -1,5 +1,7 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import {
+    View, Text, Image, StyleSheet
+} from 'react-native';
 
 const PhotoDetailScreen = ({ route }) => {
     const { photo } = route.params; // Get photo data from navigation params

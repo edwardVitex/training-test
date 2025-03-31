@@ -2,9 +2,16 @@ import React from 'react';
 import {
     View, Text, FlatList, StyleSheet, ActivityIndicator
 } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import ImageItem from '@src/components/ImageItem';
 
-const PhotoScreen = ({ navigation, photos, loading }) => {
+type PhotoScreenProps = {
+    navigation: StackNavigationProp<any>;
+    photos: Array<any>;
+    loading: boolean;
+};
+
+const PhotoScreen = ({ navigation, photos, loading }: PhotoScreenProps) => {
 
     if (loading) {
         return (

@@ -13,11 +13,6 @@ const PhotoDetailScreen = ({ route }) => {
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.card}>
-                    <Image
-                        source={{ uri: post.url }}
-                        style={styles.image}
-                        resizeMode="cover"
-                    />
                     <View style={styles.contentContainer}>
                         <Text style={styles.title}>{post.title}</Text>
                         <View style={styles.divider} />

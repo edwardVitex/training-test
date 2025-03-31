@@ -1,11 +1,22 @@
 import React from 'react';
 import {
-    Text, Image, StyleSheet, TouchableOpacity, View, Dimensions
+    Text, Image, StyleSheet, TouchableOpacity, View
 } from 'react-native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-const { width } = Dimensions.get('window');
+type PhotoItem = {
+    id: number;
+    title: string;
+    thumbnailUrl: string;
+    albumId?: number;
+};
 
-const ImageItem = ({ item, navigation }) => (
+type ImageItemProps = {
+    item: PhotoItem;
+    navigation: StackNavigationProp<any>;
+};
+
+const ImageItem = ({ item, navigation }: ImageItemProps) => (
     <TouchableOpacity
         style={styles.photoItem}
         onPress={() => navigation.navigate('PhotoDetail', { photo: item })}
@@ -19,11 +30,12 @@ const ImageItem = ({ item, navigation }) => (
             />
         </View>
         <View style={styles.contentContainer}>
-            <Text style={styles.title} numberOfLines={2}>{item.title}</Text>
+            <Text
+                style={styles.title}
+                numberOfLines={2}
+            >{item.title}</Text>
             <Text style={styles.id}>Photo #{item.id}</Text>
-            {item.albumId && (
-                <Text style={styles.albumId}>Album #{item.albumId}</Text>
-            )}
+            <Text style={styles.albumId}>Album #{item.albumId}</Text>
         </View>
     </TouchableOpacity>
 );

@@ -1,41 +1,33 @@
 import React from 'react';
 import {
-    View, Text, Image, StyleSheet, TouchableOpacity
+    View, Text, StyleSheet, TouchableOpacity
 } from 'react-native';
 
-const PostItem = ({ item, navigation }) => {
-    // Create a truncated body preview if body is available
-    const bodyPreview = item.body
-        ? `${item.body.substring(0, 60)}${item.body.length > 60 ? '...' : ''}`
-        : '';
-
-    return (
-        <TouchableOpacity
-            style={styles.postItem}
-            onPress={() => navigation.navigate('PostDetail', { post: item })}
-            activeOpacity={0.7}
-        >
-            {item.thumbnailUrl && (
-                <Image
-                    source={{ uri: item.thumbnailUrl }}
-                    style={styles.thumbnail}
-                />
-            )}
-            <View style={styles.contentContainer}>
-                <Text style={styles.title} numberOfLines={2}>{item.title}</Text>
-                {bodyPreview ? (
-                    <Text style={styles.preview} numberOfLines={2}>{bodyPreview}</Text>
-                ) : null}
-                <View style={styles.metaContainer}>
-                    {item.userId && (
-                        <Text style={styles.meta}>User ID: {item.userId}</Text>
-                    )}
-                    <Text style={styles.meta}>Post #{item.id}</Text>
-                </View>
+const PostItem = ({ item, navigation }) => (
+    <TouchableOpacity
+        style={styles.postItem}
+        onPress={() => navigation.navigate('PostDetail', { post: item })}
+        activeOpacity={0.7}
+    >
+        <View style={styles.contentContainer}>
+            <Text
+                style={styles.title}
+                numberOfLines={1}
+            >
+                {item.title}
+            </Text>
+            <Text
+                style={styles.preview}
+                numberOfLines={2}
+            >
+                {item.body}
+            </Text>
+            <View style={styles.metaContainer}>
+                <Text style={styles.meta}>Post #{item.id}</Text>
             </View>
-        </TouchableOpacity>
-    );
-};
+        </View>
+    </TouchableOpacity>
+);
 
 const styles = StyleSheet.create({
     postItem: {

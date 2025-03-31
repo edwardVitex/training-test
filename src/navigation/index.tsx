@@ -72,20 +72,20 @@ const AppNavigation = () => {
         >
             <Tabs.Navigator>
                 <Tabs.Screen
-                    name={SCREENS.PHOTO_SCREEN}
-                    component={PhotoScreen}
-                    options={{
-                        headerShown: false,
-                        tabBarLabel: 'Photo',
-                        tabBarIcon: () => null,
-                    }}
-                />
-                <Tabs.Screen
                     name={SCREENS.POST_SCREEN}
                     component={PostScreen}
                     options={{
                         headerShown: false,
                         tabBarLabel: 'Post',
+                        tabBarIcon: () => null,
+                    }}
+                />
+                <Tabs.Screen
+                    name={SCREENS.PHOTO_SCREEN}
+                    component={PhotoScreen}
+                    options={{
+                        headerShown: false,
+                        tabBarLabel: 'Photo',
                         tabBarIcon: () => null,
                     }}
                 />
