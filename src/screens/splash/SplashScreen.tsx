@@ -3,6 +3,7 @@ import React, { useMemo } from 'react';
 import {
     Image,
     StyleSheet,
+    Text,
     View,
 } from 'react-native';
 
@@ -26,6 +27,7 @@ const SplashScreen = () => {
     return (
         <View style={[styles.splashContainer, { backgroundColor: themeColors.color_app_background }]}>
             {renderLogo}
+            <Text>Hello</Text>
         </View>
     );
 };

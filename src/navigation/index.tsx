@@ -1,13 +1,6 @@
-import React, {
-    memo,
-    useCallback,
-    useRef,
-    useState,
-} from 'react';
-
+import React, { memo, useRef } from 'react';
 import { SCREENS } from '@navigation/config/screenName';
 import NavigationService from '@navigation/NavigationService';
-// import analytics from '@react-native-firebase/analytics';
 import {
     NavigationContainer,
     NavigationContainerRef,
@@ -16,73 +9,31 @@ import {
     createStackNavigator,
     TransitionPresets,
 } from '@react-navigation/stack';
+import BottomTab from '@src/navigation/bottomTab/BottomTabNavigation'; // Import BottomTab
 import { RootStackParamList } from '@src/navigation/NavigationRouteProps';
-import SplashScreen from '@src/screens/splash/SplashScreen';
 import useThemeColors from '@src/themes/useThemeColors';
-import { log } from '@src/utils/logger';
 
 const StackNavigator = createStackNavigator<RootStackParamList>();
 
 const AppNavigation = () => {
     const { themeColors } = useThemeColors();
 
-    const navigationRef = useRef<NavigationContainerRef<{}>>();
+    const navigationRef = useRef<NavigationContainerRef<{}>>(null);
     const routeNameRef = useRef<string>();
 
-    const [_loading, setLoading] = useState(true);
-
-    const getInitData = useCallback(async () => {
-        setTimeout(() => {
-            setLoading(false);
-        }, 1000);
-
-    }, []);
-
-    const ref = useCallback((refNavigation: NavigationContainerRef<{}>) => {
+    const ref = (refNavigation: NavigationContainerRef<{}>) => {
         navigationRef.current = refNavigation;
         NavigationService.setTopLevelNavigator(refNavigation);
-    }, []);
+    };
 
-    const onStateChange = useCallback(async () => {
-        const previousRouteName = routeNameRef.current;
+    const onStateChange = () => {
         const currentRouteName = navigationRef.current?.getCurrentRoute()?.name;
-
-        log('Screen: ', currentRouteName);
-
-        if (previousRouteName !== currentRouteName) {
-            // await analytics().logScreenView({
-            //     screen_name: currentRouteName,
-            //     screen_class: currentRouteName,
-            // });
-        }
-
-        routeNameRef.current = currentRouteName;
-    }, []);
-
-    const onReady = useCallback(() => {
-        routeNameRef.current = navigationRef.current?.getCurrentRoute()?.name;
-        // if (isUserLoggedIn) {
-        // set axios header token when open app from close state
-        // setHeaderToken(userData?.token);
-        // }
-        getInitData();
-    }, [getInitData]);
-
-    const checkAppScreen = useCallback(() => (
-        <StackNavigator.Screen
-            options={{
-                ...TransitionPresets.ModalFadeTransition,
-                gestureEnabled: false,
-            }}
-            name={SCREENS.SPLASH_SCREEN}
-            component={SplashScreen}
-        />
-    ), []);
+        routeNameRef.current = currentRouteName; // Cập nhật tên route hiện tại
+    };
 
     return (
         <NavigationContainer
             ref={ref}
-            onReady={onReady}
             onStateChange={onStateChange}
         >
             <StackNavigator.Navigator
@@ -96,7 +47,13 @@ const AppNavigation = () => {
                     },
                 }}
             >
-                {checkAppScreen()}
+                <StackNavigator.Screen
+                    name={SCREENS.BOTTOM_TAB_SCREEN}
+                    component={BottomTab} // Hiển thị BottomTab
+                    options={{
+                        ...TransitionPresets.ModalFadeTransition,
+                    }}
+                />
             </StackNavigator.Navigator>
         </NavigationContainer>
     );
