@@ -3,25 +3,30 @@ import {
     View, FlatList, TouchableOpacity, StyleSheet, Text, Image
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import axios from 'axios'; // Import axios
+import axios from 'axios';
 import useDimens, { DimensType } from '@src/hooks/useDimens';
 import useThemeColors from '@src/themes/useThemeColors';
 import { SCREENS } from '@src/navigation/config/screenName';
+import LoadingIndicator from '@src/components/LoadingIndicator';
 
 const PhotoScreen = () => {
     const Dimens = useDimens();
     const styles = stylesF(Dimens);
     const { themeColors } = useThemeColors();
     const [photos, setPhotos] = useState([]);
+    const [loading, setLoading] = useState(true);
     const navigation = useNavigation();
 
     useEffect(() => {
         const fetchPhotos = async () => {
             try {
-                const response = await axios.get('https://jsonplaceholder.typicode.com/photos'); // Sử dụng axios để gọi API
-                setPhotos(response.data); // Lưu dữ liệu vào state
+                setLoading(true);
+                const response = await axios.get('https://jsonplaceholder.typicode.com/photos');
+                setPhotos(response.data);
             } catch (error) {
                 console.error('Error fetching photos:', error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -48,11 +53,15 @@ const PhotoScreen = () => {
 
     return (
         <View style={[styles.container, { backgroundColor: themeColors.color_app_background }]}>
-            <FlatList
-                data={photos}
-                renderItem={renderItem}
-                keyExtractor={(item) => item.id.toString()}
-            />
+            {loading ? (
+                <LoadingIndicator />
+            ) : (
+                <FlatList
+                    data={photos}
+                    renderItem={renderItem}
+                    keyExtractor={(item) => item.id.toString()}
+                />
+            )}
         </View>
     );
 };

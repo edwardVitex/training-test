@@ -3,25 +3,30 @@ import {
     View, FlatList, TouchableOpacity, StyleSheet, Text
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import axios from 'axios'; // Import axios
+import axios from 'axios';
 import useDimens, { DimensType } from '@src/hooks/useDimens';
 import useThemeColors from '@src/themes/useThemeColors';
 import { SCREENS } from '@src/navigation/config/screenName';
+import LoadingIndicator from '@src/components/LoadingIndicator';
 
 const PostScreen = () => {
     const Dimens = useDimens();
     const styles = stylesF(Dimens);
     const { themeColors } = useThemeColors();
     const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(true);
     const navigation = useNavigation();
 
     useEffect(() => {
         const fetchPosts = async () => {
             try {
-                const response = await axios.get('https://jsonplaceholder.typicode.com/posts'); // Sử dụng axios để gọi API
-                setPosts(response.data); // Lưu dữ liệu vào state
+                setLoading(true);
+                const response = await axios.get('https://jsonplaceholder.typicode.com/posts');
+                setPosts(response.data);
             } catch (error) {
                 console.error('Error fetching posts:', error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -50,11 +55,15 @@ const PostScreen = () => {
 
     return (
         <View style={[styles.container, { backgroundColor: themeColors.color_app_background }]}>
-            <FlatList
-                data={posts}
-                renderItem={renderItem}
-                keyExtractor={(item) => item.id.toString()}
-            />
+            {loading ? (
+                <LoadingIndicator />
+            ) : (
+                <FlatList
+                    data={posts}
+                    renderItem={renderItem}
+                    keyExtractor={(item) => item.id.toString()}
+                />
+            )}
         </View>
     );
 };

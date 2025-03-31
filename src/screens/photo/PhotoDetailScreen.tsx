@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import {
     View, StyleSheet, Text, Image
 } from 'react-native';
-import axios from 'axios'; // Import axios
 import useDimens, { DimensType } from '@src/hooks/useDimens';
 import useThemeColors from '@src/themes/useThemeColors';
+import axios from 'axios';
+import LoadingIndicator from '@src/components/LoadingIndicator';
 
 const PhotoDetailScreen = ({ route }) => {
     const { photoId } = route.params;
@@ -12,22 +13,34 @@ const PhotoDetailScreen = ({ route }) => {
     const styles = stylesF(Dimens);
     const { themeColors } = useThemeColors();
     const [photo, setPhoto] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchPhotoDetail = async () => {
             try {
-                const response = await axios.get(`https://jsonplaceholder.typicode.com/photos/${photoId}`); // Sử dụng axios để gọi API
-                setPhoto(response.data); // Lưu dữ liệu vào state
+                setLoading(true);
+                const response = await axios.get(`https://jsonplaceholder.typicode.com/photos/${photoId}`);
+                setPhoto(response.data);
             } catch (error) {
                 console.error('Error fetching photo detail:', error);
+            } finally {
+                setLoading(false);
             }
         };
 
         fetchPhotoDetail();
     }, [photoId]);
 
+    if (loading) {
+        return <LoadingIndicator />;
+    }
+
     if (!photo) {
-        return <Text>Loading...</Text>;
+        return (
+            <View style={[styles.container, { backgroundColor: themeColors.color_app_background }]}>
+                <Text style={styles.title}>Photo not found</Text>
+            </View>
+        );
     }
 
     return (
@@ -45,6 +58,8 @@ const stylesF = (Dimens: DimensType) => StyleSheet.create({
     container: {
         flex: 1,
         padding: Dimens.H_16,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     image: {
         width: '100%',
@@ -56,6 +71,7 @@ const stylesF = (Dimens: DimensType) => StyleSheet.create({
         fontSize: Dimens.H_24,
         fontWeight: 'bold',
         marginBottom: Dimens.H_8,
+        textAlign: 'center',
     },
 });
 

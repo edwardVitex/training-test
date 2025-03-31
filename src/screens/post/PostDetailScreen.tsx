@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import {
     View, StyleSheet, Text
 } from 'react-native';
-import axios from 'axios'; // Import axios
+import axios from 'axios';
 import useDimens, { DimensType } from '@src/hooks/useDimens';
 import useThemeColors from '@src/themes/useThemeColors';
+import LoadingIndicator from '@src/components/LoadingIndicator';
 
 const PostDetailScreen = ({ route }) => {
     const { postId } = route.params;
@@ -12,22 +13,26 @@ const PostDetailScreen = ({ route }) => {
     const styles = stylesF(Dimens);
     const { themeColors } = useThemeColors();
     const [post, setPost] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchPostDetail = async () => {
             try {
-                const response = await axios.get(`https://jsonplaceholder.typicode.com/posts/${postId}`); // Sử dụng axios để gọi API
-                setPost(response.data); // Lưu dữ liệu vào state
+                setLoading(true);
+                const response = await axios.get(`https://jsonplaceholder.typicode.com/posts/${postId}`);
+                setPost(response.data);
             } catch (error) {
                 console.error('Error fetching post detail:', error);
+            } finally {
+                setLoading(false);
             }
         };
 
         fetchPostDetail();
     }, [postId]);
 
-    if (!post) {
-        return <Text>Loading...</Text>;
+    if (loading) {
+        return <LoadingIndicator />;
     }
 
     return (
