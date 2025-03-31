@@ -7,7 +7,7 @@
         "ios": "react-native run-ios",
         "clean:android": "cp envs/.env.dev .env && rm -rf android/app/build && cd android && ./gradlew clean && cd ..",
         "clean:ios": "cd ios && pod cache clean --all && rm -rf build && rm -rf Pods && rm -rf Podfile.lock && RCT_NEW_ARCH_ENABLED=0 bundle exec pod install && cd ..",
-        "run:android_dev": "cp envs/.env.dev .env && npx react-native run-android --mode 'devDebug'",
+        "run:android_dev": "copy envs\\.env.dev .env & npx react-native run-android --mode devDebug",
         "run:android_stag": "cp envs/.env.stag .env && npx react-native run-android --mode 'stagDebug'",
         "run:android_prod": "cp envs/.env.prod .env && npx react-native run-android --mode 'prodDebug'",
         "build:android_dev": "cp envs/.env.dev .env && cd android && ./gradlew assembleDevRelease && cd ..",

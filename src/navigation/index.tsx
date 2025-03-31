@@ -7,24 +7,20 @@ import React, {
 
 import { SCREENS } from '@navigation/config/screenName';
 import NavigationService from '@navigation/NavigationService';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 // import analytics from '@react-native-firebase/analytics';
 import {
     NavigationContainer,
     NavigationContainerRef,
 } from '@react-navigation/native';
-import {
-    createStackNavigator,
-    TransitionPresets,
-} from '@react-navigation/stack';
-import { RootStackParamList } from '@src/navigation/NavigationRouteProps';
-import SplashScreen from '@src/screens/splash/SplashScreen';
-import useThemeColors from '@src/themes/useThemeColors';
 import { log } from '@src/utils/logger';
+import PhotoScreen from '@src/navigation/PhotoStack';
+import PostScreen from '@src/navigation/PostStack';
 
-const StackNavigator = createStackNavigator<RootStackParamList>();
+const Tabs = createBottomTabNavigator();
 
 const AppNavigation = () => {
-    const { themeColors } = useThemeColors();
 
     const navigationRef = useRef<NavigationContainerRef<{}>>();
     const routeNameRef = useRef<string>();
@@ -68,36 +64,32 @@ const AppNavigation = () => {
         getInitData();
     }, [getInitData]);
 
-    const checkAppScreen = useCallback(() => (
-        <StackNavigator.Screen
-            options={{
-                ...TransitionPresets.ModalFadeTransition,
-                gestureEnabled: false,
-            }}
-            name={SCREENS.SPLASH_SCREEN}
-            component={SplashScreen}
-        />
-    ), []);
-
     return (
         <NavigationContainer
             ref={ref}
             onReady={onReady}
             onStateChange={onStateChange}
         >
-            <StackNavigator.Navigator
-                detachInactiveScreens={false}
-                screenOptions={{
-                    ...TransitionPresets.SlideFromRightIOS,
-                    headerShown: false,
-                    gestureEnabled: true,
-                    cardStyle: {
-                        backgroundColor: themeColors.color_app_background,
-                    },
-                }}
-            >
-                {checkAppScreen()}
-            </StackNavigator.Navigator>
+            <Tabs.Navigator>
+                <Tabs.Screen
+                    name={SCREENS.PHOTO_SCREEN}
+                    component={PhotoScreen}
+                    options={{
+                        headerShown: false,
+                        tabBarLabel: 'Photo',
+                        tabBarIcon: () => null,
+                    }}
+                />
+                <Tabs.Screen
+                    name={SCREENS.POST_SCREEN}
+                    component={PostScreen}
+                    options={{
+                        headerShown: false,
+                        tabBarLabel: 'Post',
+                        tabBarIcon: () => null,
+                    }}
+                />
+            </Tabs.Navigator>
         </NavigationContainer>
     );
 };

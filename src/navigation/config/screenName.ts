@@ -16,4 +16,6 @@ export const SCREENS = {
     SPLASH_SCREEN: 'SplashScreen',
     POKEMON_LIST_SCREEN: 'PokemonListScreen',
     POKEMON_DETAIL_SCREEN: 'PokemonDetailScreen',
+    POST_SCREEN: 'PostScreen',
+    PHOTO_SCREEN: 'PhotoScreen'
 };
